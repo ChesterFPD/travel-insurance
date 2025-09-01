@@ -74,17 +74,21 @@
       #cmp-modal{align-items:flex-end}
       #cmp-modal .modal-card{width:100vw;height:92vh;max-width:100%;max-height:none;border-radius:.75rem .75rem 0 0;padding:.75rem}
       #cmp-modal h2{font-size:1.125rem}
-      #cmp-modal table{table-layout:auto;min-width:700px} /* narrower attributes column on mobile */
+      #cmp-modal table{table-layout:auto;min-width:500px}
+    #cmp-modal th:first-child,#cmp-modal td:first-child{min-width:150px;max-width:170px}
+    #cmp-modal .cmp-col{min-width:150px;max-width:170px} /* narrower attributes column on mobile */
       #cmp-modal th:first-child,#cmp-modal td:first-child{min-width:160px;max-width:180px}
       #cmp-modal th,#cmp-modal td{font-size:14px;line-height:20px;padding:.75rem;}
       #cmp-modal tfoot td{padding-top:1rem;}
       #cmp-modal tfoot td a.cta{display:block;width:100%;margin:0 auto;margin-bottom:.5rem}
       /* Product cards */
-      .product-card{padding:1rem}
+      .product-card{padding:1rem;display:flex;flex-direction:column;gap:.75rem}
       .product-card h2{font-size:1rem;line-height:1.4}
       .product-card .text-2xl{font-size:1.25rem}
       .product-card .cta{width:100%;margin-top:.5rem}
       .product-card .flex.items-center.justify-between{flex-direction:column;align-items:flex-start;gap:.5rem}
+      /* Move compare checkbox below promo bar */
+      .product-card .absolute.top-3.right-3{position:static;margin-top:.25rem;align-self:flex-end}
     }
   </style>
 </head>
