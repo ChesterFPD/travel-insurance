@@ -31,12 +31,13 @@
     /* Popup modal */
     #cmp-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:100; }
     #cmp-modal { display:none; position:fixed; inset:0; z-index:110; align-items:center; justify-content:center; }
-    #cmp-modal .modal-card { background:#fff; border-radius:0.75rem; width:min(480px,92vw); max-width:92vw; height:min(85vh,720px); max-height:85vh; overflow:hidden; padding:1rem; margin:0 auto; display:flex; flex-direction:column; }
+    #cmp-modal .modal-card { background:#fff; border-radius:0.75rem; width:min(900px,90vw); max-width:90vw; height:min(85vh,760px); max-height:85vh; overflow:hidden; padding:1rem; margin:0 auto; display:flex; flex-direction:column; }
 
     #cmp-body { overflow:auto; }
-    table { width:max-content; }
+    table { width:100%; table-layout:auto; }
     th.sticky-col, td.sticky-col { position:sticky; left:0; background:#f9fafb; z-index:2; }
     th.sticky-col { top:0; z-index:3; background:#f3f4f6; }
+    .cmp-col { min-width:160px; max-width:180px; }
 
     /* Mobile optimizations */
     @media (max-width:640px){
@@ -57,9 +58,29 @@
       .product-card .text-2xl{font-size:1.25rem}
       .product-card .cta{width:100%;margin-top:.5rem}
       .product-card .flex.items-center.justify-between{flex-direction:column;align-items:flex-start;gap:.5rem}
-      .product-card .absolute.top-3.right-3{position:static;margin-top:.25rem;align-self:flex-end}
+      .product-card .promo-banner{display:flex;align-items:center;justify-content:space-between;gap:.25rem;position:relative;padding-right:3rem;}
+      .product-card .compare-box{position:absolute;top:.5rem;right:.75rem;margin-top:0}
     }
-  </style>
+
+    /* Desktop refinements */
+    @media (min-width:641px){
+      .promo-banner{display:flex;align-items:center;justify-content:space-between;position:relative;padding-right:3rem}
+      .compare-box{position:absolute;top:.5rem;right:.75rem;margin-top:0}
+      #cmp-modal table{table-layout:auto;min-width:540px}
+      #cmp-modal thead th{position:sticky;top:0;background:#f3f4f6;z-index:4}
+      #cmp-modal th:first-child,#cmp-modal td:first-child{min-width:160px;max-width:180px;background:#f9fafb;position:sticky;left:0;z-index:3}
+      #cmp-modal .cmp-col{min-width:160px;max-width:180px}
+    }
+  /* --- Fix: product headers overlapping the "List of Attributes" cell --- */
+#cmp-modal table{ border-collapse: separate; border-spacing: 0; }
+/* Make header row sticky and give it a base layer */
+#cmp-modal thead th{ position: sticky; top: 0; background: #f3f4f6; z-index: 10; box-shadow: inset 0 -1px 0 #e5e7eb; }
+/* First-column HEADER (List of Attributes) — on top of everything in header */
+#cmp-modal thead th.sticky-col{ left: 0; z-index: 15; box-shadow: 2px 0 0 #e5e7eb, inset 0 -1px 0 #e5e7eb; }
+/* First-column BODY/FOOTER cells — above body cells */
+#cmp-modal tbody td.sticky-col,
+#cmp-modal tfoot td.sticky-col{ position: sticky; left: 0; background: #f9fafb; z-index: 12; box-shadow: 2px 0 0 #e5e7eb; }
+</style>
 </head>
 <body class="bg-gray-50 text-gray-900 leading-relaxed">
   <main class="max-w-4xl mx-auto p-4 md:p-6">
@@ -68,65 +89,79 @@
       <p class="text-gray-600">Compare coverage details across Starr, HL Assurance and MSIG travel insurance plans.</p>
     </header>
 
-    <!-- Product Cards -->
     <section class="space-y-6">
       <!-- Starr -->
       <article class="product-card relative border border-gray-200 rounded-xl bg-white shadow-sm p-4">
-        <div class="promo-banner bg-green-100 rounded-lg px-3 py-2 text-sm font-semibold">🔥 Get JISULIFE Fan + up to $70 vouchers upon checkout</div>
-        <div class="absolute top-3 right-3 flex items-center gap-1 compare-box">
-          <input type="checkbox" id="compare-starr" class="compare-check w-4 h-4" data-col="1" data-name="Starr TraveLead Bronze">
-          <label for="compare-starr" class="text-sm">Compare</label>
+        <div class="promo-banner bg-green-100 rounded-lg px-3 py-2 text-sm font-semibold">
+          🔥 Get JISULIFE Fan + up to $70 vouchers upon checkout
+          <span class="compare-box inline-flex items-center gap-1">
+            <input type="checkbox" class="compare-check w-4 h-4" data-col="1" data-name="Starr TraveLead Bronze"/>
+            <span class="text-sm">Compare</span>
+          </span>
         </div>
         <div class="mt-3 flex items-center gap-3">
-          <img class="logo h-6" src="https://www.starrcompanies.com/Sitefinity/WebsiteTemplates/StarrCompanies/App_Themes/StarrCompanies/Images/logo.png" alt="Starr"/>
+          <img class="h-6" src="https://www.starrcompanies.com/Sitefinity/WebsiteTemplates/StarrCompanies/App_Themes/StarrCompanies/Images/logo.png" alt="Starr"/>
           <h2 class="text-xl font-bold">Starr TraveLead Comprehensive with COVID-19 Coverage (Bronze Plan)</h2>
         </div>
         <div class="mt-3 flex items-center justify-between">
           <div class="text-2xl font-bold">S$ 18.53</div>
           <a href="#" class="cta">Express Checkout</a>
         </div>
-        <div class="mt-2 text-sm text-gray-500"><span class="line-through">S$ 46.33</span> <span class="ml-2 inline-block px-2 py-0.5 rounded-full bg-teal-100 text-teal-700 font-semibold text-xs">60% off</span></div>
+        <div class="mt-2 text-sm text-gray-500">
+          <span class="line-through">S$ 46.33</span>
+          <span class="ml-2 inline-block px-2 py-0.5 rounded-full bg-teal-100 text-teal-700 font-semibold text-xs">60% off</span>
+        </div>
       </article>
 
       <!-- HLAS -->
       <article class="product-card relative border border-gray-200 rounded-xl bg-white shadow-sm p-4">
-        <div class="promo-banner bg-green-100 rounded-lg px-3 py-2 text-sm font-semibold">🎁 Get JISULIFE Fan + up to $50 vouchers upon checkout</div>
-        <div class="absolute top-3 right-3 flex items-center gap-1 compare-box">
-          <input type="checkbox" id="compare-hlas" class="compare-check w-4 h-4" data-col="2" data-name="HLAS Protect360 Basic">
-          <label for="compare-hlas" class="text-sm">Compare</label>
+        <div class="promo-banner bg-green-100 rounded-lg px-3 py-2 text-sm font-semibold">
+          🎁 Get JISULIFE Fan + up to $50 vouchers upon checkout
+          <span class="compare-box inline-flex items-center gap-1">
+            <input type="checkbox" class="compare-check w-4 h-4" data-col="2" data-name="HLAS Protect360 Basic"/>
+            <span class="text-sm">Compare</span>
+          </span>
         </div>
         <div class="mt-3 flex items-center gap-3">
-          <img class="logo h-6" src="https://www.hlas.com.sg/themes/custom/hlassurance/logo.png" alt="HL Assurance"/>
+          <img class="h-6" src="https://www.hlas.com.sg/themes/custom/hlassurance/logo.png" alt="HL Assurance"/>
           <h2 class="text-xl font-bold">HLAS Travel Protect360 Basic</h2>
         </div>
         <div class="mt-3 flex items-center justify-between">
           <div class="text-2xl font-bold">S$ 20.00</div>
           <a href="#" class="cta">Express Checkout</a>
         </div>
-        <div class="mt-2 text-sm text-gray-500"><span class="line-through">S$ 50.00</span> <span class="ml-2 inline-block px-2 py-0.5 rounded-full bg-teal-100 text-teal-700 font-semibold text-xs">60% off</span></div>
+        <div class="mt-2 text-sm text-gray-500">
+          <span class="line-through">S$ 50.00</span>
+          <span class="ml-2 inline-block px-2 py-0.5 rounded-full bg-teal-100 text-teal-700 font-semibold text-xs">60% off</span>
+        </div>
       </article>
 
       <!-- MSIG -->
       <article class="product-card relative border border-gray-200 rounded-xl bg-white shadow-sm p-4">
-        <div class="promo-banner bg-green-100 rounded-lg px-3 py-2 text-sm font-semibold">✅ Get JISULIFE Fan + up to $50 vouchers upon checkout</div>
-        <div class="absolute top-3 right-3 flex items-center gap-1 compare-box">
-          <input type="checkbox" id="compare-msig" class="compare-check w-4 h-4" data-col="3" data-name="MSIG Standard Plan">
-          <label for="compare-msig" class="text-sm">Compare</label>
+        <div class="promo-banner bg-green-100 rounded-lg px-3 py-2 text-sm font-semibold">
+          ✅ Get JISULIFE Fan + up to $50 vouchers upon checkout
+          <span class="compare-box inline-flex items-center gap-1">
+            <input type="checkbox" class="compare-check w-4 h-4" data-col="3" data-name="MSIG Standard Plan"/>
+            <span class="text-sm">Compare</span>
+          </span>
         </div>
         <div class="mt-3 flex items-center gap-3">
-          <img class="logo h-6" src="https://www.msig.com.sg/themes/custom/msig/logo.png" alt="MSIG"/>
+          <img class="h-6" src="https://www.msig.com.sg/themes/custom/msig/logo.png" alt="MSIG"/>
           <h2 class="text-xl font-bold">MSIG Standard Plan</h2>
         </div>
         <div class="mt-3 flex items-center justify-between">
           <div class="text-2xl font-bold">S$ 19.40</div>
           <a href="#" class="cta">Express Checkout</a>
         </div>
-        <div class="mt-2 text-sm text-gray-500"><span class="line-through">S$ 48.50</span> <span class="ml-2 inline-block px-2 py-0.5 rounded-full bg-teal-100 text-teal-700 font-semibold text-xs">60% off</span></div>
+        <div class="mt-2 text-sm text-gray-500">
+          <span class="line-through">S$ 48.50</span>
+          <span class="ml-2 inline-block px-2 py-0.5 rounded-full bg-teal-100 text-teal-700 font-semibold text-xs">60% off</span>
+        </div>
       </article>
     </section>
   </main>
 
-  <!-- Comparison Bar -->
+  <!-- Compare bar -->
   <div id="compare-bar" class="backdrop-blur">
     <div id="selected-products" class="flex flex-wrap gap-2"></div>
     <button id="compare-btn" class="cta">Compare Now</button>
@@ -136,26 +171,26 @@
   <table id="source-compare" class="hidden">
     <thead>
       <tr>
-        <th>List of Attributes</th>
-        <th>Starr TraveLead Comprehensive (Bronze Plan)</th>
-        <th>HLAS Travel Protect360 Basic</th>
-        <th>MSIG Standard Plan</th>
+        <th class="sticky-col">List of Attributes</th>
+        <th class="cmp-col">Starr TraveLead Comprehensive (Bronze Plan)</th>
+        <th class="cmp-col">HLAS Travel Protect360 Basic</th>
+        <th class="cmp-col">MSIG Standard Plan</th>
       </tr>
     </thead>
     <tbody>
-      <tr><td>Price</td><td>$50</td><td>$70</td><td>$90</td></tr>
-      <tr><td>Rewards</td><td>5% cashback</td><td>Air miles</td><td>Hotel vouchers</td></tr>
-      <tr><td>Trip cancellation</td><td>$2,000</td><td>$5,000</td><td>$10,000</td></tr>
-      <tr><td>Loss of baggage</td><td>$1,000</td><td>$2,000</td><td>$3,000</td></tr>
-      <tr><td>Overseas medical expenses</td><td>$100,000</td><td>$200,000</td><td>$300,000</td></tr>
-      <tr><td>Medical expenses in Singapore</td><td>$10,000</td><td>$15,000</td><td>$20,000</td></tr>
+      <tr><td class="sticky-col">Price</td><td class="cmp-col">$50</td><td class="cmp-col">$70</td><td class="cmp-col">$90</td></tr>
+      <tr><td class="sticky-col">Rewards</td><td class="cmp-col">5% cashback</td><td class="cmp-col">Air miles</td><td class="cmp-col">Hotel vouchers</td></tr>
+      <tr><td class="sticky-col">Trip cancellation</td><td class="cmp-col">$2,000</td><td class="cmp-col">$5,000</td><td class="cmp-col">$10,000</td></tr>
+      <tr><td class="sticky-col">Loss of baggage</td><td class="cmp-col">$1,000</td><td class="cmp-col">$2,000</td><td class="cmp-col">$3,000</td></tr>
+      <tr><td class="sticky-col">Overseas medical expenses</td><td class="cmp-col">$100,000</td><td class="cmp-col">$200,000</td><td class="cmp-col">$300,000</td></tr>
+      <tr><td class="sticky-col">Medical expenses in Singapore</td><td class="cmp-col">$10,000</td><td class="cmp-col">$15,000</td><td class="cmp-col">$20,000</td></tr>
     </tbody>
     <tfoot>
       <tr>
-        <td></td>
-        <td><a href="#" class="cta">Buy Now</a></td>
-        <td><a href="#" class="cta">Buy Now</a></td>
-        <td><a href="#" class="cta">Buy Now</a></td>
+        <td class="sticky-col"></td>
+        <td class="cmp-col"><a href="#" class="cta">Buy Now</a></td>
+        <td class="cmp-col"><a href="#" class="cta">Buy Now</a></td>
+        <td class="cmp-col"><a href="#" class="cta">Buy Now</a></td>
       </tr>
     </tfoot>
   </table>
@@ -165,84 +200,97 @@
   <div id="cmp-modal" role="dialog" aria-modal="true" aria-labelledby="cmp-title">
     <div class="modal-card">
       <div class="flex items-center justify-between border-b border-gray-200 pb-2 sticky top-0 bg-white z-10">
-        <div>
-          <h2 id="cmp-title" class="text-xl font-bold">Compare Plans</h2>
-        </div>
-        <button id="cmp-close" class="close-btn" aria-label="Close">✕</button>
+        <h2 id="cmp-title" class="text-xl font-bold">Compare Plans</h2>
+        <button id="cmp-close" aria-label="Close" class="text-2xl leading-none">✕</button>
       </div>
       <div id="cmp-body" class="mt-3"></div>
     </div>
   </div>
 
   <script>
-    const checks = document.querySelectorAll('.compare-check');
+    // Elements
     const bar = document.getElementById('compare-bar');
     const selectedProducts = document.getElementById('selected-products');
     const compareBtn = document.getElementById('compare-btn');
 
+    // Delegate change: sync duplicates (same data-col) and update bar
+    document.addEventListener('change', (e)=>{
+      if(!e.target.classList || !e.target.classList.contains('compare-check')) return;
+      const col = e.target.dataset.col;
+      const checked = e.target.checked;
+      document.querySelectorAll('.compare-check[data-col="'+col+'"]').forEach(cb=> cb.checked = checked);
+      updateCompareBar();
+    });
+
     function updateCompareBar(){
-      const sel = Array.from(checks).filter(cb => cb.checked);
-      if(sel.length >= 2){
+      const cols = Array.from(new Set(Array.from(document.querySelectorAll('.compare-check:checked')).map(cb => cb.dataset.col)));
+      if(cols.length >= 2){
         bar.style.display = 'flex';
-        // Render chips
         selectedProducts.innerHTML = '';
-        selectedProducts.style.display = 'flex';
-        selectedProducts.style.flexWrap = 'wrap';
-        selectedProducts.style.gap = '0.25rem';
-        sel.forEach(cb => {
+        cols.forEach(col=>{
+          const any = document.querySelector('.compare-check[data-col="'+col+'"]');
           const chip = document.createElement('span');
           chip.className = 'chip';
-          chip.textContent = cb.dataset.name;
+          chip.textContent = any ? any.dataset.name : ('Plan '+col);
           selectedProducts.appendChild(chip);
         });
-      } else {
+      }else{
         bar.style.display = 'none';
       }
     }
-    checks.forEach(cb => cb.addEventListener('change', updateCompareBar));
 
     // Modal helpers
     const overlay = document.getElementById('cmp-overlay');
     const modal = document.getElementById('cmp-modal');
     const modalBody = document.getElementById('cmp-body');
     const closeBtn = document.getElementById('cmp-close');
+
     function openModal(){ overlay.style.display='block'; modal.style.display='flex'; document.body.style.overflow='hidden'; }
     function closeModal(){ overlay.style.display='none'; modal.style.display='none'; document.body.style.overflow=''; modalBody.innerHTML=''; }
-    overlay.addEventListener('click', closeModal); closeBtn.addEventListener('click', closeModal); document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
+
+    overlay.addEventListener('click', closeModal);
+    closeBtn.addEventListener('click', closeModal);
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
 
     function buildCompareTable(colIdx){
       const src = document.getElementById('source-compare');
       const tbl = document.createElement('table');
-      tbl.className = 'w-full';
 
-      // Header
+      // Thead
       const thead = document.createElement('thead');
-      const hr = document.createElement('tr');
-      const attrHead = src.tHead.rows[0].cells[0].cloneNode(true);
-      attrHead.classList.add('cmp-sticky','cmp-head');
-      hr.appendChild(attrHead);
-      colIdx.forEach(i => { const n = src.tHead.rows[0].cells[i].cloneNode(true); n.classList.add('cmp-col'); hr.appendChild(n); });
-      thead.appendChild(hr);
+      const trh = document.createElement('tr');
+      const h0 = src.tHead.rows[0].cells[0].cloneNode(true);
+      h0.classList.add('sticky-col');
+      trh.appendChild(h0);
+      colIdx.forEach(i=>{
+        const h = src.tHead.rows[0].cells[i].cloneNode(true);
+        h.classList.add('cmp-col');
+        trh.appendChild(h);
+      });
+      thead.appendChild(trh);
       tbl.appendChild(thead);
 
-      // Body
+      // Tbody
       const tbody = document.createElement('tbody');
-      Array.from(src.tBodies[0].rows).forEach(r => {
+      Array.from(src.tBodies[0].rows).forEach(r=>{
         const tr = document.createElement('tr');
-        tr.className = 'border-t';
-        const attr = r.cells[0].cloneNode(true); attr.classList.add('cmp-sticky'); tr.appendChild(attr);
-        colIdx.forEach(i => { const n = r.cells[i].cloneNode(true); n.classList.add('cmp-col'); tr.appendChild(n); });
+        const c0 = r.cells[0].cloneNode(true); c0.classList.add('sticky-col'); tr.appendChild(c0);
+        colIdx.forEach(i=>{
+          const c = r.cells[i].cloneNode(true); c.classList.add('cmp-col'); tr.appendChild(c);
+        });
         tbody.appendChild(tr);
       });
       tbl.appendChild(tbody);
 
-      // Footer (CTAs)
+      // Tfoot
       if(src.tFoot){
         const tf = document.createElement('tfoot');
-        Array.from(src.tFoot.rows).forEach(r => {
+        Array.from(src.tFoot.rows).forEach(r=>{
           const tr = document.createElement('tr');
-          const attr = r.cells[0].cloneNode(true); attr.classList.add('cmp-sticky'); tr.appendChild(attr);
-          colIdx.forEach(i => { const n = r.cells[i].cloneNode(true); n.classList.add('cmp-col'); tr.appendChild(n); });
+          const c0 = r.cells[0].cloneNode(true); c0.classList.add('sticky-col'); tr.appendChild(c0);
+          colIdx.forEach(i=>{
+            const c = r.cells[i].cloneNode(true); c.classList.add('cmp-col'); tr.appendChild(c);
+          });
           tf.appendChild(tr);
         });
         tbl.appendChild(tf);
@@ -250,13 +298,11 @@
       return tbl;
     }
 
-    compareBtn.addEventListener('click', () => {
-      const sel = Array.from(checks).filter(cb => cb.checked);
-      if(sel.length < 2) return;
-      const colIdx = sel.map(cb => parseInt(cb.dataset.col, 10));
-      const table = buildCompareTable(colIdx);
-      modalBody.innerHTML = '';
-      modalBody.appendChild(table);
+    compareBtn.addEventListener('click', ()=>{
+      const cols = Array.from(new Set(Array.from(document.querySelectorAll('.compare-check:checked')).map(cb => parseInt(cb.dataset.col,10))));
+      if(cols.length < 2) return;
+      modalBody.textContent = '';
+      modalBody.appendChild(buildCompareTable(cols));
       openModal();
     });
   </script>
