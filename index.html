@@ -57,14 +57,21 @@
     }
     .chip { background:#eef2ff; color:#3730a3; font-weight:600; font-size:12px; padding:.25rem .5rem; border-radius:999px; }
 
-    /* Popup modal */
-    #cmp-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:100; }
-    #cmp-modal { display:none; position:fixed; inset:0; z-index:110; align-items:center; justify-content:center; }
-    #cmp-modal .modal-card { background:#fff; border-radius:0.75rem; max-width:480px; width:95%; max-height:90%; overflow:auto; padding:1rem; }
-    #cmp-body { overflow-x:auto }
-    .close-btn { border:none; background:none; font-size:1.25rem; cursor:pointer; }
-    .cmp-sticky { position:sticky; left:0; background:#fff; z-index:1; box-shadow:inset -1px 0 0 #eee }
-    .cmp-sticky.cmp-head { z-index:2; background:#f3f4f6 }
+   /* Popup modal */
+  #cmp-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:100; }
+  #cmp-modal { display:none; position:fixed; inset:0; z-index:110; align-items:center; justify-content:center; }
+  #cmp-modal .modal-card {
+    background:#fff;
+    border-radius:0.75rem;
+    width:min(480px,92vw);   /* cap width */
+    max-width:92vw;
+    height:min(85vh,720px);  /* cap height */
+    max-height:85vh;
+    overflow:auto;
+    padding:1rem;
+    margin:0 auto;
+  }
+
 
     /* Mobile optimizations */
     @media (max-width:640px){
